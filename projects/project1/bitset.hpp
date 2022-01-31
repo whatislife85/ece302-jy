@@ -5,48 +5,46 @@
 class Bitset{
 public:
 
-  // TODO COMMENT
+  //constructs valid bitset of size 8 with all bits set to 0
   Bitset();
 
-  // TODO COMMENT
+  //constructs valid bitset of size 'size' with all bits set to 0
   Bitset(intmax_t size);
 
-  // TODO COMMENT
+  //constructs valid bitset from string array of 1's and 0's
   Bitset(const std::string & value);
 
-  // TODO COMMENT
+  //deconstructs Bitset object and deallocates memory
   ~Bitset();
 
   Bitset(const Bitset & ) = delete;
   Bitset & operator=(const Bitset &) = delete;
 
-  // TODO COMMENT
+  //returns size of bitset
   intmax_t size() const;
 
-  // TODO COMMENT
+  //returns true if bitset is valid, false otherwise
   bool good() const;
 
-  // TODO COMMENT
+  //sets 'index' bit value to 1
   void set(intmax_t index);
 
-  // TODO COMMENT
+  //resets 'index' bit value to 0
   void reset(intmax_t index);
 
-  // TODO COMMENT
+  //toggles 'index' bit value
   void toggle(intmax_t index);
 
-  // TODO COMMENT
+  //checks if 'index' bit is set, returns true if yes and false if not
   bool test(intmax_t index);
 
-  // TODO COMMENT
+  //returns bitset as a string of digits from left-to-right
   std::string asString() const;
 
 private:
-
-  // TODO
-  bool valid;
-  intmax_t bsize;
-  u_int8_t *myBitset;
+  bool valid; //true if bitset is valid, false otherwise
+  intmax_t bsize; //size of bitset
+  u_int8_t *myBitset; //bitset
 };
 
 #endif
