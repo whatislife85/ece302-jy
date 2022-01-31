@@ -44,6 +44,9 @@ public:
 private:
 
   // TODO
+  bool valid;
+  intmax_t bsize;
+  u_int8_t *myBitset;
 };
 
 #endif
