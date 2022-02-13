@@ -5,7 +5,7 @@ project(bag_interface CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCE bag_tests.cpp abstract_bag.hpp bag_simple.hpp bag_simple.tpp)
+set(SOURCE bag_tests.cpp bag_simple.hpp bag_simple.tpp)
 
 # create unittests
 add_executable(bag-tests catch.hpp ${SOURCE})

@@ -43,7 +43,8 @@ public:
 
 private:
 
-  // TODO
+  T *data;
+  int size;
   
 };
 
