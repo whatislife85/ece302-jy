@@ -11,7 +11,7 @@ template<typename T> ArrayList<T>::ArrayList() {
 
 // destructor
 template<typename T> ArrayList<T>::~ArrayList() {
-  delete data;
+  delete [] data;
 }
 
 // copy constructor
@@ -25,6 +25,7 @@ template<typename T> ArrayList<T>::ArrayList(const ArrayList & rhs) {
 
 // copy assignment
 template<typename T> ArrayList<T> & ArrayList<T>::operator=(const ArrayList & rhs) {
+  if(data) {delete [] data;}
   data = new T[101];
   for(int i = 1; i <= rhs.getLength(); i++) {
     data[i] = rhs.data[i];
