@@ -10,5 +10,7 @@ TEST_CASE( "Test FindPalindrome add a non-allowable word", "[FindPalindrome]" )
 	INFO("Hint: add a single non-allowable word");
 	FindPalindrome b;
 	REQUIRE(!b.add("kayak1"));
+	REQUIRE(b.add("kayak"));
+	
 }
 
