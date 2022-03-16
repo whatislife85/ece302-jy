@@ -25,11 +25,14 @@ private:
 	/** Bag to store the XML element names. Uses the book's Bag implementation. */
 	Bag<std::string>* elementNameBag;
 	/** Stack to store XML tag names while parsing. Uses your stack implementation. */
-	Stack<std::string>* parseStack;
+	Stack<TokenStruct>* parseStack;
 	/** Vector to store the tokenized input string and the token types */
 	std::vector<TokenStruct> tokenizedInputVector;
   
-  // You can add or change the private fields.
+	bool parsed = false;
+	bool tokenized = false;
+	std::string badChars = "!\"#$%&\'()*+,/;<=>?@[\\]^`{|}~";
+	std::string badStartChars = "-,.";
 
 public:
 	/** The class constructor.
@@ -43,6 +46,9 @@ public:
 		@post  If successful, the input string is tokenized, the tokens are stored internally.
 		@param inputString  The input string.
 		@return  true if tokenization was successful, or false if not. */
+	
+	std::string deleteAttributes(std::string input);
+
 	bool tokenizeInputString(const std::string &inputString);
 	/** Parses a valid tokenized string (stored internally after a successful call to tokenizeInputString)
 	    and returns true if the tokenized input is valid XML.  Valid XML satisfies the BPG discussed 

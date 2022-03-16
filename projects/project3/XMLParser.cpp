@@ -7,38 +7,109 @@
 #include <assert.h>
 #include "XMLParser.hpp"
 
-// TODO: Implement the constructor here
 XMLParser::XMLParser()
 {
+  parseStack = new Stack<TokenStruct>;
+  elementNameBag = new Bag<std::string>;
 }  // end default constructor
 
-// TODO: Implement the destructor here
 XMLParser::~XMLParser()
 {
+  delete parseStack;
+  delete elementNameBag;
 }  // end destructor
 
-// TODO: Implement the tokenizeInputString method
 bool XMLParser::tokenizeInputString(const std::string &inputString)
 {
-	return false;
+  for(int i = 0; i < inputString.length(); i++) {
+    std::string tagStr;
+    TokenStruct testToken;
+    if(inputString[i] == '<') {
+      for(char ch : badStartChars) {
+        if(inputString[i+1] == ch) {tokenized = false; return tokenized;}
+      }
+      if((inputString[i+1] >= 'a' && inputString[i+1] <= 'z') 
+	|| (inputString[i+1] >= 'A' && inputString[i+1] <= 'Z')) {
+        while(inputString[i+1] != '/' && inputString[i+1] != '>') {
+          tagStr += inputString[i+1];
+          i++;
+        }
+
+	tagStr = deleteAttributes(tagStr);
+	for(char ch1 : tagStr) {
+          for(char ch2 : badChars) {
+            if(ch1 == ch2) {tokenized = false; return tokenized;}
+	  }
+	}
+         
+	if(inputString[i+1] == '/') {testToken.tokenType = EMPTY_TAG;}
+	else {testToken.tokenType = START_TAG;}
+      }
+      
+      else if(inputString[i] == '/') {
+        for(char ch : badStartChars) {
+          if(inputString[i+1] == ch) {tokenized = false; return false;}
+	  for(i = i; inputString[i+1] != '>'; i++) {
+            if(inputString[i+1] == '<') {tokenized = false; return tokenized;}
+	    tagStr += inputString[i+1];
+	  }
+	}
+      }
+
+      else if(inputString[i] == '?') {
+        for(i = i; inputString[i+1] != '?'; i++) {
+          if(inputString[i+1] == '<') {tokenized = false; return tokenized;}
+	  tagStr += inputString[i+1];
+	}
+      }
+    }
+
+    else if(inputString[i] != ' ' && inputString[i] != '>') {
+      for(i = i; inputString[i] != '<'; i++) {tagStr += inputString[i];}
+      testToken.tokenType = CONTENT;
+      i--;
+    }
+
+    if(!tagStr.empty()) {
+      testToken.tokenString = tagStr;
+      tokenizedInputVector.push_back(testToken);
+      if(testToken.tokenType != END_TAG) {elementNameBag->add(testToken.tokenString);}
+    }
+  }
+  tokenized = true;
+  return tokenized;
 }  // end
 
-// TODO: Implement a helper function to delete attributes from a START_TAG
-// or EMPTY_TAG string (you can change this...)
-static std::string deleteAttributes(std::string input)
+std::string XMLParser::deleteAttributes(std::string input)
 {
-	return input;
+  std::string str;
+  for(char ch : input) {
+    if(ch == ' ') {break;}
+    else {str += ch;}
+  }
+  return str;
 }
 
-// TODO: Implement the parseTokenizedInput method here
 bool XMLParser::parseTokenizedInput()
 {
-	return false;
+  for(TokenStruct testToken : tokenizedInputVector) {
+    if(testToken.tokenType == START_TAG) {parseStack->push(testToken);}
+    else if(testToken.tokenType == END_TAG) {
+      if(parseStack->peek().tokenString == testToken.tokenString
+	&& parseStack->peek().tokenType == START_TAG) {
+        parseStack->pop();
+      } else {parsed = false; return parsed;}
+    } 
+  }
+  parsed = parseStack->isEmpty();
+  return parsed;
 }
 
-// TODO: Implement the clear method here
 void XMLParser::clear()
 {
+  parseStack->clear();
+  elementNameBag->clear();
+  tokenizedInputVector.clear();
 }
 
 vector<TokenStruct> XMLParser::returnTokenizedInput() const
@@ -46,15 +117,15 @@ vector<TokenStruct> XMLParser::returnTokenizedInput() const
 	return tokenizedInputVector;
 }
 
-// TODO: Implement the containsElementName method
 bool XMLParser::containsElementName(const std::string &inputString) const
 {
-	return false;
+  if(!parsed || !tokenized) {return false;}
+  else {return elementNameBag->contains(inputString);}
 }
 
-// TODO: Implement the frequencyElementName method
 int XMLParser::frequencyElementName(const std::string &inputString) const
 {
-	return -1;
+  if(!parsed || !tokenized) {return false;}
+  else {return elementNameBag->getFrequencyOf(inputString);}
 }
 
