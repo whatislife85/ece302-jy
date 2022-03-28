@@ -12,6 +12,16 @@ TEST_CASE("Testing Priority Queue", "[priority queue]") {
 
   PriorityQueueType pq;
 
-  // TODO
+  REQUIRE(pq.isEmpty());
+  pq.add(2);
+  REQUIRE(!pq.isEmpty());
+  REQUIRE(pq.peek() == 2);
+  pq.add(1);
+  REQUIRE(pq.peek() == 2);
+  pq.remove();
+  REQUIRE(pq.peek() == 1);
+  REQUIRE(!pq.isEmpty());
+  pq.remove();
+  REQUIRE(pq.isEmpty());
   
 }
